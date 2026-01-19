@@ -23,6 +23,7 @@ func cleanInput(text string) []string {
 
 func mainLoop() {
 	scanner := bufio.NewScanner(os.Stdin)
+	allCommands := getCommands()
 
 	for {
 		fmt.Print("Pokedex > ")
@@ -33,7 +34,12 @@ func mainLoop() {
 		clean := cleanInput(input)
 
 		if len(clean) > 0 {
-			fmt.Printf("Your command was: %v\n", clean[0])
+
+			if command, ok := allCommands[clean[0]]; ok {
+				command.callback()
+			} else {
+				fmt.Println("Unknown command")
+			}
 		}
 	}
 }
