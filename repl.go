@@ -29,14 +29,17 @@ func mainLoop() {
 		fmt.Print("Pokedex > ")
 		
 		scanner.Scan()
-		input := scanner.Text()
-		
-		clean := cleanInput(input)
+		input := cleanInput(scanner.Text())
 
-		if len(clean) > 0 {
+		if len(input) > 0 {
 
-			if command, ok := allCommands[clean[0]]; ok {
-				command.callback()
+			if command, ok := allCommands[input[0]]; ok {
+
+				err := command.callback()
+				if err != nil {
+					fmt.Printf("Error %v\n", err)
+				}
+
 			} else {
 				fmt.Println("Unknown command")
 			}
