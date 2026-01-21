@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/12awoodward/pokedexcli/internal/pokeapi"
 )
 
 type cliCommand struct {
@@ -23,7 +25,25 @@ func getCommands() map[string]cliCommand {
 			description: "Displays a help message",
 			callback: commandHelp,
 		},
+		"map": {
+			name: "map",
+			description: "Displays the next 20 areas",
+			callback: commandMap,
+		},
 	}
+}
+
+func commandMap() error {
+	areas, err := pokeapi.GetLocationAreas(0)
+	if err != nil {
+		return err
+	}
+	
+	for _, area := range areas {
+		fmt.Println(area.Name)
+	}
+	
+	return nil
 }
 
 func commandExit() error {
