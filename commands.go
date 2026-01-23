@@ -34,7 +34,32 @@ func getCommands() map[string]cliCommand {
 			description: "Displays the next 20 areas",
 			callback: commandMap,
 		},
+		"mapb": {
+			name: "map",
+			description: "Displays the previous 20 areas",
+			callback: commandMapb,
+		},
 	}
+}
+
+func commandMapb(c *config) error {
+	if c.mapPage <= 1 {
+		fmt.Println("You're on the first page")
+		return nil
+	}
+
+	c.mapPage -= 1
+
+	areas, _, err := pokeapi.GetLocationAreas(c.mapPage - 1)
+	if err != nil {
+		return err
+	}
+	
+	for _, area := range areas {
+		fmt.Println(area.Name)
+	}
+	
+	return nil
 }
 
 func commandMap(c *config) error {
