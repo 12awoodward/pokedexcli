@@ -2,6 +2,7 @@ package pokeapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 )
@@ -22,6 +23,10 @@ func getApiData[T any](endpoint string, result *T) error {
 	}
 
 	defer res.Body.Close()
+
+	if res.StatusCode <= 200 || res.StatusCode >= 299 {
+		return fmt.Errorf("Status: %v, %v", res.StatusCode, http.StatusText(res.StatusCode))
+	}
 
 	decoder := json.NewDecoder(res.Body)
 	decoder.Decode(result)
