@@ -24,6 +24,8 @@ func mainLoop() {
 	scanner := bufio.NewScanner(os.Stdin)
 	allCommands := getCommands()
 
+	c := config{}
+
 	for {
 		fmt.Print("Pokedex > ")
 		
@@ -34,7 +36,7 @@ func mainLoop() {
 
 			if command, ok := allCommands[input[0]]; ok {
 
-				err := command.callback()
+				err := command.callback(&c)
 				if err != nil {
 					fmt.Printf("Error %v\n", err)
 				}

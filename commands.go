@@ -7,10 +7,14 @@ import (
 	"github.com/12awoodward/pokedexcli/internal/pokeapi"
 )
 
+type config struct {
+	mapPage int
+}
+
 type cliCommand struct {
 	name string
 	description string
-	callback func() error
+	callback func(*config) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -33,8 +37,8 @@ func getCommands() map[string]cliCommand {
 	}
 }
 
-func commandMap() error {
-	areas, _, err := pokeapi.GetLocationAreas(100)
+func commandMap(c *config) error {
+	areas, hasNextPage, err := pokeapi.GetLocationAreas(c.mapPage)
 	if err != nil {
 		return err
 	}
@@ -42,17 +46,21 @@ func commandMap() error {
 	for _, area := range areas {
 		fmt.Println(area.Name)
 	}
+
+	if hasNextPage {
+		c.mapPage += 1
+	}
 	
 	return nil
 }
 
-func commandExit() error {
+func commandExit(c *config) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp() error {
+func commandHelp(c *config) error {
 	fmt.Print("Welcome to the Pokedex!\nUsage:\n\n")
 	for _, command := range getCommands() {
 		fmt.Printf("%v: %v\n", command.name, command.description)
