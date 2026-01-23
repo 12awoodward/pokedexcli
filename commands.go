@@ -34,7 +34,7 @@ func getCommands() map[string]cliCommand {
 }
 
 func commandMap() error {
-	areas, err := pokeapi.GetLocationAreas(0)
+	areas, _, err := pokeapi.GetLocationAreas(100)
 	if err != nil {
 		return err
 	}

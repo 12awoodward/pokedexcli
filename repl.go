@@ -13,12 +13,11 @@ func cleanInput(text string) []string {
 	}
 
 	split := strings.Fields(text)
-	lower := make([]string, len(split))
 
 	for i, word := range split {
-		lower[i] = strings.ToLower(word)
+		split[i] = strings.ToLower(word)
 	}
-	return lower
+	return split
 }
 
 func mainLoop() {
