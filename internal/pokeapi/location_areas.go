@@ -18,11 +18,11 @@ type locationAreasResult struct {
 	URL  string `json:"url"`
 }
 
-func GetLocationAreas(pageNo int) ([]locationAreasResult, bool, error) {
-	if pageNo < 0 {
-		return nil, false, errors.New("page cannot be negative")
+func GetLocationAreas(pageNo int) ([]locationAreasResult, error) {
+	if pageNo <= 0 {
+		return nil, errors.New("page cannot be zero / negative")
 	}
-	offset := strconv.Itoa(pageNo * 20)
+	offset := strconv.Itoa((pageNo - 1) * 20)
 
 	query := url.Values{
 		"limit": {"20"},
@@ -31,14 +31,14 @@ func GetLocationAreas(pageNo int) ([]locationAreasResult, bool, error) {
 
 	requestUrl, err := addQueryParams(apiUrl + "location-area", query)
 	if err != nil {
-		return nil, false, err
+		return nil, err
 	}
 
 	var areas locationAreas
 	err = getApiData(requestUrl, &areas)
 	if err != nil {
-		return nil, false, err
+		return nil, err
 	}
 
-	return areas.Results, len(areas.Next) != 0, nil
+	return areas.Results, nil
 }

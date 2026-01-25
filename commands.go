@@ -50,7 +50,7 @@ func commandMapb(c *config) error {
 
 	c.mapPage -= 1
 
-	areas, _, err := pokeapi.GetLocationAreas(c.mapPage - 1)
+	areas, err := pokeapi.GetLocationAreas(c.mapPage)
 	if err != nil {
 		return err
 	}
@@ -63,17 +63,21 @@ func commandMapb(c *config) error {
 }
 
 func commandMap(c *config) error {
-	areas, hasNextPage, err := pokeapi.GetLocationAreas(c.mapPage)
+	c.mapPage += 1
+
+	areas, err := pokeapi.GetLocationAreas(c.mapPage)
 	if err != nil {
 		return err
+	}
+
+	if len(areas) == 0 {
+		c.mapPage -= 1
+		fmt.Println("You're on the last page")
+		return nil
 	}
 	
 	for _, area := range areas {
 		fmt.Println(area.Name)
-	}
-
-	if hasNextPage {
-		c.mapPage += 1
 	}
 	
 	return nil
