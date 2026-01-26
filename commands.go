@@ -8,7 +8,8 @@ import (
 )
 
 type config struct {
-	mapPage int
+	mapNext string
+	mapPrev string
 }
 
 type cliCommand struct {
@@ -43,43 +44,47 @@ func getCommands() map[string]cliCommand {
 }
 
 func commandMapb(c *config) error {
-	if c.mapPage <= 1 {
+	if len(c.mapPrev) == 0 {
 		fmt.Println("You're on the first page")
 		return nil
 	}
 
-	c.mapPage -= 1
-
-	areas, err := pokeapi.GetLocationAreas(c.mapPage)
+	err := getMap(c, c.mapPrev)
 	if err != nil {
 		return err
-	}
-	
-	for _, area := range areas {
-		fmt.Println(area.Name)
 	}
 	
 	return nil
 }
 
 func commandMap(c *config) error {
-	c.mapPage += 1
+	if len(c.mapNext) == 0 {
+		c.mapNext = pokeapi.ApiUrl + "location-area"
+	}
 
-	areas, err := pokeapi.GetLocationAreas(c.mapPage)
+	err := getMap(c, c.mapNext)
+	if err != nil {
+		return err
+	}
+	
+	return nil
+}
+
+func getMap(c *config, url string) error {
+	var areas pokeapi.LocationAreas
+
+	err := pokeapi.GetApiData(url, &areas)
 	if err != nil {
 		return err
 	}
 
-	if len(areas) == 0 {
-		c.mapPage -= 1
-		fmt.Println("You're on the last page")
-		return nil
-	}
+	c.mapNext = areas.Next
+	c.mapPrev = areas.Previous
 	
-	for _, area := range areas {
+	for _, area := range areas.Results {
 		fmt.Println(area.Name)
 	}
-	
+
 	return nil
 }
 

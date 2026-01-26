@@ -7,9 +7,19 @@ import (
 	"net/url"
 )
 
-const apiUrl = "https://pokeapi.co/api/v2/"
+const ApiUrl = "https://pokeapi.co/api/v2/"
 
-func getApiData[T any](endpoint string, result *T) error {
+type LocationAreas struct {
+	Count    int    `json:"count"`
+	Next     string `json:"next"`
+	Previous string `json:"previous"`
+	Results  []struct{
+		Name string `json:"name"`
+		URL  string `json:"url"`
+	} `json:"results"`
+}
+
+func GetApiData[T any](endpoint string, result *T) error {
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
 		return err
@@ -33,7 +43,7 @@ func getApiData[T any](endpoint string, result *T) error {
 	return nil
 }
 
-func addQueryParams(req string, vals url.Values) (string, error) {
+func AddQueryParams(req string, vals url.Values) (string, error) {
 	requestUrl, err := url.Parse(req)
 	if err != nil {
 		return "", err
