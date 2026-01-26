@@ -16,7 +16,9 @@ type cacheEntry struct {
 }
 
 func NewCache(interval time.Duration) *cache {
-	c := cache{}
+	c := cache{
+		data: map[string]cacheEntry{},
+	}
 	go c.reapLoop(interval)
 	return &c
 }
@@ -45,7 +47,7 @@ func (c *cache) Get(key string) ([]byte, bool) {
 
 func (c *cache) reapLoop(interval time.Duration) {
 	ticker := time.NewTicker(interval)
-	
+
 	for range ticker.C {
 		expiredBy := time.Now().Add(-interval)
 		
