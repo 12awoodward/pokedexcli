@@ -1,7 +1,6 @@
 package pokecache
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -32,7 +31,6 @@ func (c *Cache) Add(key string, val []byte) {
 		createdAt: time.Now(),
 		val: val,
 	}
-	fmt.Printf("\nCache Add: %v\n", key)
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {
@@ -41,11 +39,9 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 
 	entry, ok := c.data[key]
 	if !ok {
-		fmt.Printf("\nCache Not Found: %v\n", key)
 		return nil, false
 	}
 
-	fmt.Printf("\nCache Get: %v\n", key)
 	return entry.val, true
 }
 
@@ -60,7 +56,6 @@ func (c *Cache) reapLoop(interval time.Duration) {
 		for key, entry := range c.data {
 			if entry.createdAt.Before(expiredBy) {
 				delete(c.data, key)
-				fmt.Printf("\nCache Clear: %v\n", key)
 			}
 		}
 

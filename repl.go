@@ -41,7 +41,7 @@ func mainLoop() {
 
 			if command, ok := allCommands[input[0]]; ok {
 
-				err := command.callback(&c)
+				err := command.callback(&c, input[1:]...)
 				if err != nil {
 					fmt.Printf("Error %v\n", err)
 				}
