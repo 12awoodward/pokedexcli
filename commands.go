@@ -5,11 +5,13 @@ import (
 	"os"
 
 	"github.com/12awoodward/pokedexcli/internal/pokeapi"
+	"github.com/12awoodward/pokedexcli/internal/pokecache"
 )
 
 type config struct {
 	mapNext string
 	mapPrev string
+	cache pokecache.Cache
 }
 
 type cliCommand struct {
@@ -67,24 +69,6 @@ func commandMap(c *config) error {
 		return err
 	}
 	
-	return nil
-}
-
-func getMap(c *config, url string) error {
-	var areas pokeapi.LocationAreas
-
-	err := pokeapi.GetApiData(url, &areas)
-	if err != nil {
-		return err
-	}
-
-	c.mapNext = areas.Next
-	c.mapPrev = areas.Previous
-	
-	for _, area := range areas.Results {
-		fmt.Println(area.Name)
-	}
-
 	return nil
 }
 
