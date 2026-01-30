@@ -42,7 +42,34 @@ func getCommands() map[string]cliCommand {
 			description: "Displays the previous 20 areas",
 			callback: commandMapb,
 		},
+		"explore": {
+			name: "explore",
+			description: "Find all Pokemon at a given area",
+			callback: commandExplore,
+		},
 	}
+}
+
+func commandExplore(c *config, args ...string) error {
+	var areaDetails pokeapi.LocationArea
+	areaUrl := pokeapi.ApiUrl + "location-area/" + args[0]
+	fmt.Printf("Exploring %s...\n", args[0])
+
+	err := getCache(&c.cache, areaUrl, &areaDetails)
+	if err != nil {
+		return err
+	}
+
+	encounters := areaDetails.PokemonEncounters
+	if len(encounters) == 0 {
+		fmt.Println("No Pokemon Found")
+	}
+
+	fmt.Println("Found Pokemon:")
+	for _, encounter := range encounters {
+		fmt.Printf(" - %s\n", encounter.Pokemon.Name)
+	}
+	return nil
 }
 
 func commandMapb(c *config, args ...string) error {
