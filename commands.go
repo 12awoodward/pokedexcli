@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 
 	"github.com/12awoodward/pokedexcli/internal/pokeapi"
@@ -12,6 +13,7 @@ type config struct {
 	mapNext string
 	mapPrev string
 	cache pokecache.Cache
+	pokedex map[string]pokeapi.Pokemon
 }
 
 type cliCommand struct {
@@ -47,7 +49,34 @@ func getCommands() map[string]cliCommand {
 			description: "Find all Pokemon at a given area",
 			callback: commandExplore,
 		},
+		"catch": {
+			name: "catch",
+			description: "Attempt to Catch a given Pokemon",
+			callback: commandCatch,
+		},
 	}
+}
+
+func commandCatch(c *config, args ...string) error {
+	var pokemon pokeapi.Pokemon
+	url := pokeapi.ApiUrl + "pokemon/" + args[0]
+
+	err := getCache(&c.cache, url, &pokemon)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Throwing a Pokeball at %s\n", pokemon.Name)
+	
+	if rand.Intn(1000) < pokemon.BaseExperience {
+		fmt.Printf("%s escaped!\n", pokemon.Name)
+		return nil
+	}
+
+	c.pokedex[pokemon.Name] = pokemon
+	fmt.Printf("%s was caught!\n", pokemon.Name)
+
+	return nil
 }
 
 func commandExplore(c *config, args ...string) error {

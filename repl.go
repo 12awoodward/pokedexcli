@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/12awoodward/pokedexcli/internal/pokeapi"
 	"github.com/12awoodward/pokedexcli/internal/pokecache"
 )
 
@@ -29,6 +30,7 @@ func mainLoop() {
 
 	c := config{
 		cache: *pokecache.NewCache(5 * time.Minute),
+		pokedex: map[string]pokeapi.Pokemon{},
 	}
 
 	for {
