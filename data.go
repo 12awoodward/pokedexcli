@@ -9,6 +9,22 @@ import (
 	"github.com/12awoodward/pokedexcli/internal/pokecache"
 )
 
+func pokemonStats(p pokeapi.Pokemon) {
+	fmt.Printf("Name: %v\n", p.Name)
+	fmt.Printf("Height: %v\n", p.Height)
+	fmt.Printf("Weight: %v\n", p.Weight)
+
+	fmt.Println("Stats:")
+	for _, stat := range p.Stats {
+		fmt.Printf(" -%v: %v\n", stat.Stat.Name, stat.BaseStat)
+	}
+
+	fmt.Println("Types:")
+	for _, t := range p.Types {
+		fmt.Printf(" - %v\n", t.Type.Name)
+	}
+}
+
 func getMap(c *config, url string) error {
 	var areas pokeapi.LocationAreas
 
