@@ -40,7 +40,7 @@ func getCommands() map[string]cliCommand {
 			callback: commandMap,
 		},
 		"mapb": {
-			name: "map",
+			name: "mapb",
 			description: "Displays the previous 20 areas",
 			callback: commandMapb,
 		},
@@ -66,6 +66,7 @@ func commandInspect(c *config, args ...string) error {
 	pokemon, ok := c.pokedex[args[0]]
 	if !ok {
 		fmt.Println("you have not caught that pokemon")
+		return nil
 	}
 
 	pokemonStats(pokemon)
