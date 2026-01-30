@@ -34,12 +34,13 @@ func mainLoop() {
 	}
 
 	for {
-		fmt.Print("Pokedex > ")
+		fmt.Print("\nPokedex > ")
 		
 		scanner.Scan()
 		input := cleanInput(scanner.Text())
 
 		if len(input) > 0 {
+			fmt.Println()
 
 			if command, ok := allCommands[input[0]]; ok {
 

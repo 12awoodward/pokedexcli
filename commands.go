@@ -171,7 +171,7 @@ func commandExit(c *config, args ...string) error {
 func commandHelp(c *config, args ...string) error {
 	fmt.Print("Welcome to the Pokedex!\nUsage:\n\n")
 	for _, command := range getCommands() {
-		fmt.Printf("%v: %v\n", command.name, command.description)
+		fmt.Printf("%v:\n - %v\n", command.name, command.description)
 	}
 	return nil
 }
